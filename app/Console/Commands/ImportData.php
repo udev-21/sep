@@ -14,7 +14,7 @@ class ImportData extends Command
      *
      * @var string
      */
-    protected $signature = 'import:data';
+    protected $signature = 'import:data {--debug=}';
 
     /**
      * The console command description.
@@ -40,14 +40,18 @@ class ImportData extends Command
      */
     public function handle()
     {
+        $debug = (int)$this->option('debug') === 1;
 
-        $this->update();
+        $this->update($debug);
         return 0;
     }
 
-    public function update(){
-        echo "Update has begun\n";
-        echo "Downloading...\n";
+    public function update($debug){
+
+        if($debug) {
+            echo "Update has begun\n";
+            echo "Downloading...\n";
+        }
         DB::statement('truncate passports'); // if on table used unique key then comment this line
         // $last_stat = new Stat();
         $link = "https://guvm.mvd.ru/upload/expired-passports/list_of_expired_passports.csv.bz2";
@@ -60,22 +64,29 @@ class ImportData extends Command
                 }
         }
         // $last_stat->downloaded = true;
-        echo "Downloading compeleted !\n";
-            
+        if($debug){
+            echo "Downloading compeleted !\n";
+        }
         $fname = "dump/data.".date("d.m.Y").".csv.bz2";
         $res = Storage::put($fname, $file,'public');
-        echo "File stored as $fname to storage/dump\n";
         if($res){
+            if($debug){
+                echo "File stored as $fname to storage/dump\n";
+            }
             $storagePath = Storage::disk('local')->getDriver()->getAdapter()->getPathPrefix();
             $path = $storagePath.$fname;
-            echo "Unzipping...\n";
+            if($debug){
+                echo "Unzipping...\n";
+            }
         
             exec("bunzip2 -d $path", $r, $code);
-            echo "Unzipping compeleted !\n";
-            echo "Reading data and updating DB...\n";
             $code = 0;
             if($code === 0){
-                //$last_stat->unzipped = true;
+                if($debug){
+                    echo "Unzipping compeleted !\n";
+                    echo "Reading data and updating DB...\n";
+                }
+
                 if (($handle = fopen($storagePath."dump/data.".date("d.m.Y").".csv", "r")) !== FALSE) {
                     $datas  = [];
                     fgetcsv($handle,100,',');
@@ -95,28 +106,29 @@ class ImportData extends Command
                             if($ic % 50 == 0 ){
                                 DB::commit();
                                 DB::beginTransaction();
-                                echo "250K * $icc records inserted in  ". (microtime(true) - $start) ."  seconds\n";
+                                if($debug){
+                                    echo "250K * $icc records inserted in  ". (microtime(true) - $start) ."  seconds\n";
+                                }
                                 $start = microtime(true);
                                 $icc++;
                             }
                         }
                     }
                     $res = DB::table('passports')->insertOrIgnore($datas);
-                    DB::commit();
                     
+                    DB::commit();
+
                     // dump($datas);
                     fclose($handle);
                     // dd($res);
                 }
-
-                echo "Successfully updated;";
+                if($debug)
+                    echo "Successfully updated;";
+            
                 // echo "everything is ok;";
             }else{
-
+                // here send message to admin about error with email or something like this
             }
-            // $last_stat->save();
-            return ['ok'=>true, "error"=>""];
         }
-        // $last_stat->save();
     }
 }
