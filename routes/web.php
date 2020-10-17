@@ -17,6 +17,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/test',"MainController@update");
+Route::get('/search', 'MainController@search')->name('search');
 
 Auth::routes();
 

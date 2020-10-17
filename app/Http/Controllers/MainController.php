@@ -84,9 +84,15 @@ class MainController extends Controller
     	}else{
 
     	}
+    }
 
-
-
-    	
+    public function search(Request $request){
+    	if($request->has('series') && $request->has('number')){
+    		return (DB::table('passports')->where('series', $request['series'])->where('number', $request['number'])->exists()) ? ['ok' => true, 'result'=> 'Exists'] : ['ok'=>false, 'error'=>'Not Exists'];
+    		// DB::table('passports')->where
+    	}else{
+    		return view('search');
+    	}
+    	return true;
     }
 }
