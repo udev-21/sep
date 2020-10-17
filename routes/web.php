@@ -19,6 +19,8 @@ Route::get('/', function () {
 Route::get('/test',"MainController@update");
 Route::get('/search', 'MainController@search')->name('search');
 
+Route::get('/status', 'MainController@status')->name('status');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

@@ -95,4 +95,19 @@ class MainController extends Controller
     	}
     	return true;
     }
+
+    public function status(Request $request){
+        $limit = $request['limit'] ?? 1000;
+        $start = $request['start'] ?? 0;
+        if(intval($limit) > 10000){
+            $limit = 10000;
+        }
+        $records = DB::table('passports')->offset($start)->limit($limit)->get();
+        return response()->json([
+            'success'=>true, 
+            'start'=>$start,
+            'limit'=>$limit,
+            'records'=>$records
+        ])->setEncodingOptions(JSON_UNESCAPED_UNICODE);
+    }
 }
