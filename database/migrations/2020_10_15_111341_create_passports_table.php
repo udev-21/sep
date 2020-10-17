@@ -4,6 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+use Illuminate\Database\Query\Expression;
+
 class CreatePassportsTable extends Migration
 {
     /**
@@ -17,8 +19,9 @@ class CreatePassportsTable extends Migration
             $table->id();
             $table->integer('series');
             $table->integer('number');
-            $table->unique(['series','number']);
-            // $table->timestamps();
+            $table->index(['series','number']);
+            //$table->unique(['series','number']); for now i'll not use this because of speed
+            //$table->timestamps();
         });
     }
 

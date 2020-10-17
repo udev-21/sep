@@ -48,7 +48,7 @@ class ImportData extends Command
     public function update(){
         echo "Update has begun\n";
         echo "Downloading...\n";
-        DB::statement('truncate passports');
+        DB::statement('truncate passports'); // if on table used unique key then comment this line
         // $last_stat = new Stat();
         $link = "https://guvm.mvd.ru/upload/expired-passports/list_of_expired_passports.csv.bz2";
         $file = file_get_contents($link);
