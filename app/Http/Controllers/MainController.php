@@ -104,8 +104,8 @@ class MainController extends Controller
         }
         $records = DB::table('passports')->offset($start)->limit($limit)->get();
         foreach($records as &$r){
-            $r['series'] = str_pad($r['series'], 4, '0', STR_PAD_LEFT);
-            $r['number'] = str_pad($r['number'], 6, '0', STR_PAD_LEFT);
+            $r->series = str_pad($r->series, 4, '0', STR_PAD_LEFT);
+            $r->number = str_pad($r->number, 6, '0', STR_PAD_LEFT);
         }
         return response()->json([
             'success'=>true, 
