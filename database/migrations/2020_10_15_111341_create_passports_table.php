@@ -17,7 +17,7 @@ class CreatePassportsTable extends Migration
             $table->id();
             $table->integer('series');
             $table->integer('number');
-            $table->index(['series','number']);
+            $table->unique(['series','number']);
             // $table->timestamps();
         });
     }
