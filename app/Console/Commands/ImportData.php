@@ -14,7 +14,7 @@ class ImportTable extends Command
      *
      * @var string
      */
-    protected $signature = 'import:table';
+    protected $signature = 'import:data';
 
     /**
      * The console command description.
