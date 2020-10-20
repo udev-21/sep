@@ -1,4 +1,4 @@
-<p align="center"><a href="https://voyager.ecrm.uz" target="_blank"><h2>Search Expired Passports</h2></a></p>
+<p align="center"><a href="http://voyager.ecrm.uz" target="_blank"><h2>Search Expired Passports</h2></a></p>
 
 ## SEP
 
